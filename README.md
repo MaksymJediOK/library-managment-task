@@ -1,15 +1,5 @@
 # Library Management System
 
-A NestJS-based library management system with Prisma ORM for database operations.
-
-## Features
-
-- Book management (CRUD operations)
-- Member registration and management
-- Book borrowing and returning system
-- Genre categorization
-- Search functionality
-
 ## Prerequisites
 
 - Node.js (v16 or later)
@@ -21,7 +11,6 @@ A NestJS-based library management system with Prisma ORM for database operations
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd LibrarySystem/backend
    ```
 
 2. **Install dependencies**
