@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../../node_modules/@prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Book {
+  id          Int         @id @default(autoincrement())
+  title       String
+  author      String
+  isbn        String      @unique
+  totalCopies Int
+  description String?
+  borrowings  Borrowing[]
+  genres      BookGenre[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([title])
+  @@index([author])
+}
+
+model Genre {
+  id        Int         @id @default(autoincrement())
+  name      String      @unique
+  books     BookGenre[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model BookGenre {
+  bookId    Int
+  genreId   Int
+  book      Book     @relation(fields: [bookId], references: [id])
+  genre     Genre    @relation(fields: [genreId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([bookId, genreId])
+}
+
+model Member {
+  id          Int         @id @default(autoincrement())
+  memberId    String      @unique
+  fullName    String
+  email       String      @unique
+  phoneNumber String?
+  borrowings  Borrowing[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Borrowing {
+  id         Int      @id @default(autoincrement())
+  bookId     Int
+  memberId   Int
+  borrowDate DateTime @default(now())
+  returnDate DateTime?
+  book       Book     @relation(fields: [bookId], references: [id])
+  member     Member   @relation(fields: [memberId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([bookId, memberId, returnDate])
+}
